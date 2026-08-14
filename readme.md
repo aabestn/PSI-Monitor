@@ -1,14 +1,20 @@
 # Linux Container Resource Controller & PSI Monitor
 
-A low-level C systems utility and monitoring service designed to enforce resource constraints on Linux containers using **cgroups v2** and monitor real-time resource pressure using Linux **Pressure Stall Information (PSI)** metrics.
+A low-level C++ systems utility and monitoring service designed to enforce resource constraints on Linux containers using **cgroups v2** and monitor real-time resource pressure using Linux **Pressure Stall Information (PSI)** metrics.
 
 ---
 
 ## Technical Highlights
 
 * **cgroups v2 Resource Controller:** Interface directly with `/sys/fs/cgroup/` using standard POSIX system calls (`open`, `write`) to apply hard limits on CPU quotas (`cpu.max`), memory limits (`memory.max`), and I/O bandwidth (`io.max`).
+
+
 * **PSI Stall Monitor Daemon:** Low-overhead daemon that parses `/proc/pressure/cpu`, `/proc/pressure/memory`, and `/proc/pressure/io` in real time to capture stall metrics (`avg10`, `total`) and issue alert triggers during resource contention.
+
+
 * **Reproducible Stress Workloads:** Docker Compose setup integrated with `stress-ng` to trigger throttling, out-of-memory (OOM) kills, and I/O latency spikes under controlled conditions.
+
+
 
 ---
 
@@ -16,31 +22,33 @@ A low-level C systems utility and monitoring service designed to enforce resourc
 
 ```text
 .
-├── cgroup_controller.c  # POSIX C interface for cgroups v2 control
-├── psi_monitor.c        # Real-time daemon parsing /proc/pressure metrics
-├── docker-compose.yml   # Stress testing workloads (stress-ng)
+├── cgroup_controller.cpp  # POSIX C++ interface for cgroups v2 control
+├── psi_monitor.cpp        # Real-time daemon parsing /proc/pressure metrics
+├── docker-compose.yml     # Stress testing workloads (stress-ng)
 └── README.md
+
 ```
+
 ---
 
 ## System Requirements
 
 * **OS:** Linux Kernel 4.20+ (with unified `cgroups v2` hierarchy and `PSI` support enabled)
-* **Compiler:** `gcc` (C99 standard or higher)
+* **Compiler:** `g++` (C++17 standard or higher)
 * **Container Runtime:** Docker Engine with Docker Compose v2
 
 ---
 
 ## Build Instructions
 
-Compile the C source binaries using `gcc`:
+Compile the C++ source binaries using `g++`:
 
 ```bash
 # Build cgroup controller binary
-gcc -O2 -Wall cgroup_controller.c -o cgroup_controller
+g++ -O2 -Wall cgroup_controller.cpp -o cgroup_controller
 
 # Build PSI monitor daemon
-gcc -O2 -Wall psi_monitor.c -o psi_monitor
+g++ -O2 -Wall psi_monitor.cpp -o psi_monitor
 
 ```
 
